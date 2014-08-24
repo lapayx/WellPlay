@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>WellPlay Radio</title>
+
+<link href='https://fonts.googleapis.com/css?family=Cuprum&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+
+
+
+<script src="js/jquery-2.0.3.min.js"></script>
+<script src="//vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
+<script type="text/javascript" src="//vk.com/js/api/openapi.js?108"></script>
+<script src="js/pleer.js"></script>
+<script src="js/templates.js"></script>
+<script  type="text/javascript" src="js/Template.js"></script>
+<script type="text/javascript"  src="js/core.js"></script>
+<link rel="stylesheet" href="css/chat.css">
+
+
+<script>
+	function initSuc(){
+		//alert("загрузились");
+		log(oktoGET.getParams());
+		var id =oktoGET.getParams()['viewer_id']; 
+		
+		 var self = this;
+        jQuery.ajax({
+            type: "post",
+            url: "message.php",
+           // url: "info.php",
+		   data:"&send=send&id="+id,
+
+            "success": function(data){
+				//listPlan.sort(function (a, b) { return a.key - b.key });
+				
+                console.log(data);
+				new Chat({
+						location:document.getElementsByClassName("model_dialog_content").item(0),
+						id : data.id
+					});
+				document.getElementsByClassName("model_dialog_title").item(0).innerText = "Чат";
+				window.Player.modalDialog._show();
+				/*
+				if(data.status){
+					//window.Player.modalDialog.setContent(data.message);
+					new Chat({
+						location:document.getElementsByClassName("model_dialog_content").item(0),
+						id : data.id
+					});
+					
+				}*/
+            }
+
+        });
+		
+		
+		
+		VK.api("users.get",{"user_ids":id},function(res){log(res);});
+
+	}
+	function initFail(){
+		//alert("упали");
+	}
+window.addEventListener("load",function(){
+	if(oktoGET.getParams()['viewer_id']===undefined){
+		document.getElementsByClassName("wrapper").item(0).style.margin = "0 auto";
+	}
+	VK.init(initSuc, initFail, '5.17'); 
+
+},false);
+
+
+
+/**
+ * Обработчик для работы с GET-параметрами.
+ *
+ * @class
+ * @singleton
+ */
+var oktoGET = new function(){
+  this.URL = window.location.href;
+  this.search = window.location.search;
+  this.hash = window.location.hash;
+
+  /**
+   * Получить словарь переданных GET-параметров
+   *
+   * @param {String} search [this.search] Необязательный параметр, строка,
+   *    содержащая всё, что находится в URL после|вместе с ?
+   * @return [Array] Ассоциативный массив с GET-параметрами
+   */
+  this.getParams = function(search){
+    var params = [],
+        p = (search || this.search).replace(/^\?/, '').split('&');
+
+    for (var i = 0, max = p.length, pair; i < max; i++) {
+        pair = p[i].split('=');
+        (pair[0] && pair[1]) && (params[pair[0]] = pair[1]);
+    }
+
+    return params;
+  }
+}
+</script>
+
+<!--<script src="test.json"></script>-->
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+<div id="load_application" class="loading" style="display:none;">
+
+	<center>
+
+			<p style="background:#000; width:350px; padding:20px; margin-top:100px; color:#ccc; font-weight:bold; font-size:14px; border-radius:5px;">Пожалуйста, дождитесь загрузки приложения<br><img src="images/loading.gif"/><br><span style="font-size:12px; color:#b3b3b3; font-weight:400;">Если у вас проблемы с приложением, то вы всегда можете воспользоваться <a href="http://vk.com/topic-64390625_29413680" target="_blank" style="font-weight:bold; color:#fe5b5b;">другими способами</a> послушать радио</span><p>
+
+	</center>
+
+</div>
+
+
+
+<div class="wrapper">
+
+	
+
+
+
+	
+
+
+
+	<div id="board" class="audio">
+
+
+    	<div id="stream_radiant" class="radiant">
+
+			<div id="line_radiant" class="line_r"></div>
+
+		</div>
+
+        <div id="stream_dire" class="dire">
+
+			<div id="line_dire" ></div>
+
+		</div>
+
+    </div>
+
+    
+
+    <div  class="track">
+
+    	<div id="name_track" class="name_track"></div>
+			<div class="choise">
+				<div id="like" class="like"></div>
+				<div id="dislike" class="dislike"></div>
+			</div>
+
+    </div>
+
+    
+
+    <div class="controls">
+
+    	<div id="play_pause" class="play ctr"></div>
+
+    	<div class="timer ctr"><p id="timer" class="timer_t"></p></div>
+
+    	<div id="quality" class="quality ctr"></div>
+
+    	<div id="search" class="search ctr"></div>        
+
+        <div id="volume" class="volume">
+
+        	<input type="button" value="" id="mute" class="mute mute_false">
+
+        	<input type="range" id="volume_value" value="100" min="0" max="100">
+
+        </div>
+
+    </div>
+
+	
+
+	<div class="add_button">
+
+	<a href="#" onclick="window.Player.dialogsDownloadList()"><img src="images/upload.png"> Скачать плейлист</a>
+<!--
+				<option value="http://s1.wpradio.ru:8000/radiant_128.m3u">Radiant 128kbps</option>
+
+				<option value="http://s1.wpradio.ru:8000/radiant_256.m3u">Radiant 256kbps</option>
+
+				<option value="http://s1.wpradio.ru:8000/dire_128.m3u">Dire 128kbps</option>
+
+				<option value="http://s1.wpradio.ru:8000/dire_256.m3u">Dire 256kbps</option>
+-->
+	</div>
+
+	<div class="add_button" >
+	<a href="#" onclick="window.Player.dialogsLastTraks()"><img src="images/history.png"> 	История</a>
+	</div>
+	<div id = "chat" class="add_button" >
+			<a href="javascript:void()" onclick="window.Player.modalDialog._show();"><img src="images/history.png"> 	Чат</a>
+	</div>	
+    
+
+    <div class="links">
+
+	    <a href="http://vk.com/topic-64390625_29413680" target="_blank">Как слушать радио</a> | 
+        <a href="http://wpradio.ru" target="_blank">Наш сайт</a> | 
+        <a href="http://vk.com/topic-64390625_29680196" target="_blank">Помощь проекту</a>
+
+	
+
+	</div>
+
+	
+
+<div style="top: 15px; position: relative; width: 280px; float:right;">
+
+<!-- Put this div tag to the place, where the Like block will be -->
+
+<div style="width:188px; float:right; background:#fff; border-radius: 2px;">
+
+	
+
+
+
+	<!-- VK Widget -->
+
+	<div id="vk_subscribe"></div>
+
+	<script type="text/javascript">
+
+	VK.Widgets.Subscribe("vk_subscribe", {soft: 1}, -64390625);
+
+	</script>
+
+</div>
+
+</div>
+
+
+
+	
+
+	
+
+</div>
+
+<!-- Yandex.Metrika counter --><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter24914237 = new Ya.Metrika({id:24914237, webvisor:true, clickmap:true, trackLinks:true, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/24914237" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+
+</body>
+
+</html>
+

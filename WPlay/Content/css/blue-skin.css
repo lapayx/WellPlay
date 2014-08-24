@@ -1,0 +1,7 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+html,body{ background:#015278;}
+.wrapper{ background:url(/Content/images/blue-skin/bg.jpg) no-repeat;}
+
+.audio{  background:url(/Content/images/blue-skin/audio.png); }
