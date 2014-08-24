@@ -284,3 +284,4 @@ window.addEventListener("load", function () {
     }, false);
     //document.getElementById("style-skin").href = 'Content/css/blue-skin.css'
 }, false);
+//# sourceMappingURL=Main.js.map
