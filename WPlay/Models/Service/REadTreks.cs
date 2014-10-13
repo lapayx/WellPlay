@@ -17,7 +17,7 @@ namespace WPlay.Models.Service
 
         public string Read()
         {
-            var xml = XDocument.Load(@"http://radio.hiteka.net:8000/link.xsl");
+            var xml = XDocument.Load(@"http://radio.hiteka.net:8080/link.xsl");
 
 
             var q = (from c in xml.Root.Descendants("source")

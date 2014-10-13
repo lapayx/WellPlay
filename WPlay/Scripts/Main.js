@@ -84,7 +84,7 @@ var Walkman = (function () {
     Walkman.prototype._initMount = function () {
         var self = this;
         $.ajax({
-            url: "/Radio/GetAllMount",
+            url: "/api/GetAllMount",
             success: function (data) {
                 self._initMountSource(data);
             }
@@ -142,7 +142,7 @@ var Walkman = (function () {
         if (self.audio.paused || self.curentState.mount == null)
             return;
         $.ajax({
-            url: "/Radio/GetCurrentTrack/?mount=" + self.mountSourse[self.curentState.mount][self.curentState.bitrate].fullMount,
+            url: "/api/GetCurrentTrack/?mount=" + self.mountSourse[self.curentState.mount][self.curentState.bitrate].fullMount,
             cache: false,
             success: function (data) {
                 console.log(data);
@@ -268,7 +268,7 @@ window.addEventListener("load", function () {
 
     document.getElementById("changeSkin").addEventListener("click", function () {
         var link = document.getElementById("style-skin");
-        link.href = 'Content/css/blue-skin.css';
+        link.href = '/Content/css/blue-skin.css';
     });
 
     document.getElementById("stream_radiant").addEventListener("click", function () {

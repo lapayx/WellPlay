@@ -99,7 +99,7 @@ class Walkman {
     private _initMount() {
         var self = this;
         $.ajax({
-            url: "/Radio/GetAllMount",
+            url: "/api/GetAllMount",
             success: (data: IMountList[]) => {
                 self._initMountSource(data);
 
@@ -113,7 +113,7 @@ class Walkman {
         var length = info.length;
 
         for (var i = 0; i < length; i++) {
-            var obj = info[i];
+            var obj: IMountList = info[i];
             
 
             if (this.audio.canPlayType(obj.mimeType) === "") {
@@ -125,8 +125,7 @@ class Walkman {
                 continue;
             }
 
-            if (this.mountSourse[detalemount[0]] == undefined)
-            {
+            if (this.mountSourse[detalemount[0]] == undefined){
                 this.mountSourse[detalemount[0]] = {};
             }
 
@@ -158,7 +157,7 @@ class Walkman {
         if (self.audio.paused || self.curentState.mount == null)
                 return;
         $.ajax({
-            url: "/Radio/GetCurrentTrack/?mount=" + self.mountSourse[self.curentState.mount][self.curentState.bitrate].fullMount,
+            url: "/api/GetCurrentTrack/?mount=" + self.mountSourse[self.curentState.mount][self.curentState.bitrate].fullMount,
             cache: false,
             success: (data: ICurrentTrackName) => {
                 console.log(data);
@@ -299,7 +298,7 @@ window.addEventListener("load", () => {
 
     document.getElementById("changeSkin").addEventListener("click", () => {
         var link = <HTMLLinkElement>document.getElementById("style-skin");
-        link.href = 'Content/css/blue-skin.css'
+        link.href = '/Content/css/blue-skin.css'
 
     })
 
