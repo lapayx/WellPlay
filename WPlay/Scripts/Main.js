@@ -84,7 +84,7 @@ var Walkman = (function () {
     Walkman.prototype._initMount = function () {
         var self = this;
         $.ajax({
-            url: "/api/GetAllMount",
+            url: "http://hiteka.net/api/GetAllMount",
             success: function (data) {
                 self._initMountSource(data);
             }
@@ -142,7 +142,7 @@ var Walkman = (function () {
         if (self.audio.paused || self.curentState.mount == null)
             return;
         $.ajax({
-            url: "/api/GetCurrentTrack/?mount=" + self.mountSourse[self.curentState.mount][self.curentState.bitrate].fullMount,
+            url: "http://hiteka.net/api/GetCurrentTrack/?mount=" + self.mountSourse[self.curentState.mount][self.curentState.bitrate].fullMount,
             cache: false,
             success: function (data) {
                 console.log(data);
