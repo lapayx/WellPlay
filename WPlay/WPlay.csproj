@@ -191,6 +191,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\Interfases\WalkmanParam.ts" />
     <TypeScriptCompile Include="Scripts\Main.ts" />
+    <TypeScriptCompile Include="Scripts\WPlayWalkman.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\_references.ts" />
   </ItemGroup>
