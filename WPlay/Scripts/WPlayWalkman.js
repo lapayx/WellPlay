@@ -41,8 +41,7 @@ var Timer = (function () {
 })();
 
 var WPlayWalkman = (function () {
-    function WPlayWalkman(param) {
-        ///TODO Допистаь
+    function WPlayWalkman(param, callback) {
         this.callback = {};
         this.audio = new Audio();
         this.controls = {
@@ -60,19 +59,20 @@ var WPlayWalkman = (function () {
         };
         this.mountSourse = { radiant: {}, dire: {} };
         for (var key in param) {
-            if (key === undefined) {
+            if (key == undefined) {
                 continue;
             }
             this.controls[key] = param[key];
         }
+        ;
 
-        /*this.controls.buttonPlay = param.buttonPlay;
-        this.controls.volume = param.volume;
-        this.controls.trackName = param.trackName;
-        this.controls.mute = param.mute;
-        this.controls.vkSearch = param.vkSearch;
-        this.controls.timer = param.timer;
-        */
+        for (var key in callback) {
+            if (key == undefined) {
+                continue;
+            }
+            this.callback[key] = callback[key];
+        }
+
         this.timer = new Timer();
         this.audio.volume = 0.5;
         this.audio.loop = true;
@@ -167,11 +167,11 @@ var WPlayWalkman = (function () {
             };
         }
 
-        /* if ( this.curentState.nameTrack != data.nameTrack ) {
-        if ( this.callback.changeNameTrack ) {
-        this.callback.changeNameTrack(this.curentState.mount, this.curentState.nameTrack);
+        if (this.curentState.nameTrack != data.nameTrack) {
+            if (this.callback.onChangeNameTrack) {
+                this.callback.onChangeNameTrack(this.curentState.mount, data.nameTrack);
+            }
         }
-        }*/
         this.curentState.nameTrack = data.nameTrack;
     };
 
@@ -180,10 +180,8 @@ var WPlayWalkman = (function () {
         var volume = parseInt(this.controls.volume.value) / 100;
         this.audio.volume = volume;
 
-        if (volume == 0) {
-            this.controls.mute.classList.add("mute_true");
-        } else {
-            this.controls.mute.classList.remove("mute_true");
+        if (this.callback.onChangeVolume) {
+            this.callback.onChangeVolume(volume);
         }
     };
 
@@ -194,14 +192,19 @@ var WPlayWalkman = (function () {
             }
             this.audio.src = this.mountSourse[this.curentState.mount][this.curentState.bitrate].streamUrl;
             this.audio.play();
-
-            this.controls.buttonPlay.classList.add("pause");
             this.timer.start();
+
+            if (this.callback.onPlay) {
+                this.callback.onPlay();
+            }
         } else {
             this.audio.pause();
             this.audio.src = "";
-            this.controls.buttonPlay.classList.remove("pause");
             this.timer.stop();
+
+            if (this.callback.onStop) {
+                this.callback.onStop();
+            }
         }
 
         this.controls.trackName.innerText = "";

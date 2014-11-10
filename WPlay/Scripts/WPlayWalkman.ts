@@ -48,8 +48,7 @@ class Timer {
 
 class WPlayWalkman {
 
-    ///TODO Допистаь 
-    private callback = {};
+    private callback:ICallBack = {};
     private audio = new Audio();
     private controls:IControls = {
         buttonPlay: null,
@@ -70,21 +69,21 @@ class WPlayWalkman {
     private protocol: string;
     private timer: Timer;
 
-    constructor(param: IWalkmanParam) {
+    constructor(param: IWalkmanParam, callback? :ICallBack) {
         for (var key in param) {
-            if (key === undefined) {
+            if (key == undefined) {
                 continue;
 
             }
             this.controls[key] = param[key]
+        };
+
+        for (var key in callback) {
+            if (key == undefined) {
+                continue;
+            }
+            this.callback[key] = callback[key]
         }
-        /*this.controls.buttonPlay = param.buttonPlay;
-        this.controls.volume = param.volume;
-        this.controls.trackName = param.trackName;
-        this.controls.mute = param.mute;
-        this.controls.vkSearch = param.vkSearch;
-        this.controls.timer = param.timer;
-*/
 
         this.timer = new Timer();
         this.audio.volume = 0.5;
@@ -182,11 +181,11 @@ class WPlayWalkman {
             this.controls.vkSearch.onclick = () => { window.open(encodeURI(serch), '_blank'); };
         }
 
-       /* if ( this.curentState.nameTrack != data.nameTrack ) {
-            if ( this.callback.changeNameTrack ) {
-                this.callback.changeNameTrack(this.curentState.mount, this.curentState.nameTrack);
+        if ( this.curentState.nameTrack != data.nameTrack ) {
+            if (this.callback.onChangeNameTrack ) {
+                this.callback.onChangeNameTrack(this.curentState.mount, data.nameTrack);
             }
-        }*/
+        }
         this.curentState.nameTrack = data.nameTrack;
 
 
@@ -197,11 +196,10 @@ class WPlayWalkman {
         var volume = parseInt(this.controls.volume.value)/100;
         this.audio.volume = volume;
 
-        if (volume == 0) {
-            this.controls.mute.classList.add("mute_true");
-        } else {
-            this.controls.mute.classList.remove("mute_true");
+        if (this.callback.onChangeVolume) {
+            this.callback.onChangeVolume(volume);
         }
+        
     }
 
     public playStop() {
@@ -214,15 +212,20 @@ class WPlayWalkman {
             }
             this.audio.src = this.mountSourse[this.curentState.mount][this.curentState.bitrate].streamUrl;
             this.audio.play();
-
-            this.controls.buttonPlay.classList.add("pause");
             this.timer.start();
+
+            if (this.callback.onPlay) {
+                this.callback.onPlay();
+            }
         }
         else {
             this.audio.pause();
             this.audio.src = "";
-            this.controls.buttonPlay.classList.remove("pause");
             this.timer.stop();
+
+            if (this.callback.onStop) {
+                this.callback.onStop();
+            }
 
         }
 

@@ -50,6 +50,13 @@ interface IMountSource {
         256?: IMountSourceInfo;
     };
 };
+interface ICallBack {
+    onPlay? (): void;
+    onStop? (): void;
+    onChangeVolume? (volume: number) : void;
+    onChangeNameTrack? (mount: string, name: string): void;
+
+};
 
 
 

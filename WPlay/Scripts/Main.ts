@@ -1,17 +1,41 @@
 ﻿var Player: WPlayWalkman;
 window.addEventListener("load", () => {
-    //console.log(template.x);
-    //  var t: Main;
-    // t = new Main();
-    Player = new WPlayWalkman({
-        buttonPlay: document.getElementById("play_pause"),
-        volume: <HTMLInputElement>document.getElementById("volume_value"),
-        trackName: document.getElementById("name_track"),
-        mute: document.getElementById("mute"),
-        vkSearch: document.getElementById("search"),
-        timer: document.getElementById("timer")
 
-    });
+    Player = new WPlayWalkman(
+        {
+            buttonPlay: document.getElementById("play_pause"),
+            volume: <HTMLInputElement>document.getElementById("volume_value"),
+            trackName: document.getElementById("name_track"),
+            mute: document.getElementById("mute"),
+            vkSearch: document.getElementById("search"),
+            timer: document.getElementById("timer")
+
+        }, {
+            onChangeNameTrack: (mount: string, trak: string) => {
+                console.log(mount + " " + trak);
+            },/*
+            onMute: () => {
+                
+            },
+            onUnMute: () => {
+                ;
+            },*/
+            onChangeVolume: (volume: number) => {
+                if (volume == 0) {
+                    document.getElementById("mute").classList.add("mute_true");
+                } else {
+                    document.getElementById("mute").classList.remove("mute_true")
+                }
+            },
+            onPlay: () => {
+                document.getElementById("play_pause").classList.add("pause");
+            },
+            onStop: () => {
+                document.getElementById("play_pause").classList.remove("pause");
+            }
+
+        }
+        );
 
     document.getElementById("quality").addEventListener("click", (event) => {
         var self = <HTMLElement>event.srcElement;

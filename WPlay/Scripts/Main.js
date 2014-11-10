@@ -1,8 +1,5 @@
 ﻿var Player;
 window.addEventListener("load", function () {
-    //console.log(template.x);
-    //  var t: Main;
-    // t = new Main();
     Player = new WPlayWalkman({
         buttonPlay: document.getElementById("play_pause"),
         volume: document.getElementById("volume_value"),
@@ -10,6 +7,23 @@ window.addEventListener("load", function () {
         mute: document.getElementById("mute"),
         vkSearch: document.getElementById("search"),
         timer: document.getElementById("timer")
+    }, {
+        onChangeNameTrack: function (mount, trak) {
+            console.log(mount + " " + trak);
+        },
+        onChangeVolume: function (volume) {
+            if (volume == 0) {
+                document.getElementById("mute").classList.add("mute_true");
+            } else {
+                document.getElementById("mute").classList.remove("mute_true");
+            }
+        },
+        onPlay: function () {
+            document.getElementById("play_pause").classList.add("pause");
+        },
+        onStop: function () {
+            document.getElementById("play_pause").classList.remove("pause");
+        }
     });
 
     document.getElementById("quality").addEventListener("click", function (event) {
